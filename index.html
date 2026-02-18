@@ -1,19 +1,120 @@
 <!DOCTYPE html>
-<html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <title>たんBoard</title>
-        <link rel="stylesheet" href="style.css">
-  <script src="https://esm.sh/@supabase/supabase-js@2"></script>
-    </head>
-    <body>
-        <h2>たんBoard</h2>
-        <div id="chat" class="chat-box"></div>
-        <input type="text" id="message" placeholder="メッセージを入力">
-        <button id="send">送信</button>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calc</title>
+<style>
+body {
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
 
-        <script src="script.js"></script>
-    </body>
+.calculator {
+  width: 300px;
+}
 
+.display {
+  color: white;
+  text-align: right;
+  font-size: 48px;
+  padding: 20px;
+  word-wrap: break-word;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+button {
+  height: 60px;
+  font-size: 24px;
+  border: none;
+  border-radius: 12px;
+}
+
+.number { background: #333; color: white; }
+.operator { background: orange; color: white; }
+.clear { background: gray; color: white; }
+.equal { background: green; color: white; }
+
+.zero { grid-column: span 2; }
+</style>
+</head>
+<body>
+
+<div class="calculator">
+  <div class="display" id="display">0</div>
+  <div class="buttons">
+    <button class="clear" onclick="clearDisplay()">C</button>
+    <button class="operator" onclick="setOp('/')">÷</button>
+    <button class="operator" onclick="setOp('*')">×</button>
+    <button class="operator" onclick="setOp('-')">-</button>
+
+    <button class="number" onclick="append('7')">7</button>
+    <button class="number" onclick="append('8')">8</button>
+    <button class="number" onclick="append('9')">9</button>
+    <button class="operator" onclick="setOp('+')">+</button>
+
+    <button class="number" onclick="append('4')">4</button>
+    <button class="number" onclick="append('5')">5</button>
+    <button class="number" onclick="append('6')">6</button>
+    <button class="equal" onclick="calculate()">=</button>
+
+    <button class="number" onclick="append('1')">1</button>
+    <button class="number" onclick="append('2')">2</button>
+    <button class="number" onclick="append('3')">3</button>
+
+    <button class="number zero" onclick="append('0')">0</button>
+  </div>
+</div>
+
+<script>
+let current = "";
+let previous = "";
+let operation = null;
+
+function append(value) {
+  current += value;
+  document.getElementById("display").innerText = current;
+}
+
+function clearDisplay() {
+  current = "";
+  previous = "";
+  operation = null;
+  document.getElementById("display").innerText = "0";
+}
+
+function setOp(op) {
+  previous = current;
+  current = "";
+  operation = op;
+}
+
+function calculate() {
+  let result;
+  let a = parseFloat(previous);
+  let b = parseFloat(current);
+
+  if (operation === "+") result = a + b;
+  if (operation === "-") result = a - b;
+  if (operation === "*") result = a * b;
+  if (operation === "/") result = b !== 0 ? a / b : "Error";
+
+  document.getElementById("display").innerText = result;
+  current = result.toString();
+  operation = null;
+}
+</script>
+
+</body>
 </html>
 
